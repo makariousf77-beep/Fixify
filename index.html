@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فكسفاي (fixify) - قطع غيار الأجهزة المنزلية والأجهزة المجمعة</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        burgundy: {
+                            DEFAULT: '#800020',
+                            dark: '#600018',
+                            light: '#a00028',
+                            soft: '#fbf2f4',
+                            border: '#d0a0aa'
+                        },
+                        darkbg: '#121212',
+                        darkcard: '#1e1e1e'
+                    },
+                    fontFamily: {
+                        sans: ['Tajawal', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts: Tajawal -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        /* Custom scrollbars */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #800020;
+            border-radius: 4px;
+        }
+        .whatsapp-pulse {
+            animation: pulse-ring 2s infinite;
+        }
+        @keyframes pulse-ring {
+            0% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.6);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 dark:bg-darkbg dark:text-gray-100 min-h-screen flex flex-col transition-colors duration-200">
+
+    <!-- Top Announcement & Header -->
+    <header class="sticky top-0 z-40 bg-white/90 dark:bg-darkcard/90 backdrop-blur-md shadow-md border-b border-gray-200 dark:border-gray-800">
+        <!-- Top bar for complaints link & dark mode toggle -->
+        <div class="bg-burgundy text-white px-4 py-1.5 text-xs sm:text-sm">
+            <div class="max-w-7xl mx-auto flex justify-between items-center">
+                <div class="flex items-center space-x-3 space-x-reverse">
+                    <span class="font-medium"><i class="fa-solid fa-headset ml-1"></i> <span data-i18n="support">خدمة العملاء والصيانة المعتمدة</span></span>
+                    <a href="https://wa.me/qr/6I3QMEUTVJD7C1" target="_blank" rel="noopener noreferrer" 
+                       class="underline hover:text-gray-200 font-bold bg-burgundy-dark/60 px-2 py-0.5 rounded transition">
+                       <i class="fa-solid fa-bullhorn ml-1"></i> <span data-i18n="complaints">قسم الشكاوى والاقتراحات</span>
+                    </a>
+                </div>
+                <div class="flex items-center space-x-4 space-x-reverse">
+                    <!-- Language Toggle Button -->
+                    <button onclick="toggleLanguage()" class="hover:text-amber-300 transition flex items-center font-bold text-xs bg-burgundy-dark/80 px-2 py-1 rounded" title="تغيير اللغة / Change Language">
+                        <i class="fa-solid fa-globe ml-1"></i>
+                        <span id="lang-btn-text">English</span>
+                    </button>
+
+                    <!-- Developer Mode Toggle Badge -->
+                    <div id="dev-mode-badge" class="hidden items-center bg-amber-500 text-black font-extrabold px-2 py-0.5 rounded text-xs animate-pulse">
+                        <i class="fa-solid fa-code ml-1"></i> <span data-i18n="dev_active">وضع المطور مفعّل</span>
+                    </div>
+
+                    <!-- Developer Auth Trigger -->
+                    <button onclick="handleDevButtonClick()" class="hover:text-amber-300 transition flex items-center font-bold" title="دخول/إغلاق لوحة المطور">
+                        <i class="fa-solid fa-user-gear ml-1"></i>
+                        <span class="hidden sm:inline" id="dev-button-text" data-i18n="dev_panel">لوحة المطور</span>
+                    </button>
+
+                    <!-- Theme Toggle -->
+                    <button onclick="toggleTheme()" class="hover:text-amber-300 transition focus:outline-none" title="تغيير المظهر">
+                        <i id="theme-icon" class="fa-solid fa-moon text-sm"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Navigation Bar -->
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+            <!-- Brand Logo -->
+            <a href="#" onclick="resetFilters(); return false;" class="flex items-center space-x-3 space-x-reverse group">
+                <!-- Fixify Professional Logo SVG -->
+                <div class="relative flex items-center justify-center w-12 h-12 bg-gradient-to-br from-burgundy via-burgundy-dark to-black rounded-2xl shadow-xl p-2 group-hover:scale-105 transition transform border border-burgundy-light/30">
+                    <svg viewBox="0 0 100 100" class="w-full h-full text-white fill-current drop-shadow">
+                        <path d="M50 10 C27.9 10 10 27.9 10 50 C10 72.1 27.9 90 50 90 C72.1 90 90 72.1 90 50 C90 27.9 72.1 10 50 10 Z M50 20 C66.5 20 80 33.5 80 50 C80 66.5 66.5 80 50 80 C33.5 80 20 66.5 20 50 C20 33.5 33.5 20 50 20 Z" fill-opacity="0.2"/>
+                        <path d="M68 28 L72 32 L58 46 L54 42 Z" fill="#FFC107"/>
+                        <path d="M35 32 L48 45 L42 51 L29 38 C26 41 21 41 18 38 C15 35 15 30 18 27 C21 24 26 24 29 27 L35 32 Z" fill="#FFFFFF"/>
+                        <path d="M45 52 L72 79 C75 82 80 82 83 79 C86 76 86 71 83 68 L56 41 L45 52 Z" fill="#FFC107"/>
+                    </svg>
+                    <span class="absolute -bottom-1 -right-1 bg-amber-400 text-black text-[9px] font-black px-1 rounded shadow">PRO</span>
+                </div>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-black tracking-tight text-burgundy dark:text-burgundy-light flex items-center gap-1">
+                        fixify - فكسفاي
+                    </h1>
+                    <p class="text-[10px] text-gray-500 dark:text-gray-400 font-medium" data-i18n="tagline">قطع غيار الأجهزة المنزلية والأجهزة المجمعة</p>
+                </div>
+            </a>
+
+            <!-- Desktop Search Bar -->
+            <div class="hidden md:flex flex-1 max-w-md mx-4 relative">
+                <input type="text" id="search-input" oninput="handleSearch()" 
+                       placeholder="ابحث عن قطعة غيار، جهاز مجمع، أو ماركة..." 
+                       data-i18n-ph="search_ph"
+                       class="w-full bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-full py-2 px-4 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-burgundy dark:text-white">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-gray-400"></i>
+            </div>
+
+            <!-- Header Actions -->
+            <div class="flex items-center space-x-3 space-x-reverse">
+                <a href="https://wa.me/message/B7RAZYGB5ZJ6D1" target="_blank" class="hidden sm:flex items-center px-3 py-1.5 rounded-lg border border-burgundy text-burgundy dark:text-burgundy-light text-xs font-bold hover:bg-burgundy hover:text-white transition">
+                    <i class="fa-brands fa-whatsapp ml-1.5"></i> <span data-i18n="contact_us">تواصل معنا</span>
+                </a>
+
+                <button onclick="toggleCartDrawer()" class="relative p-2.5 bg-gray-100 dark:bg-gray-800 hover:bg-burgundy/10 rounded-xl text-gray-800 dark:text-white transition">
+                    <i class="fa-solid fa-cart-shopping text-lg"></i>
+                    <span id="cart-badge" class="absolute -top-1 -right-1 bg-burgundy text-white text-[10px] font-extrabold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white dark:border-darkcard hidden">0</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Search Bar -->
+        <div class="md:hidden px-4 pb-3">
+            <div class="relative">
+                <input type="text" id="search-input-mobile" oninput="syncMobileSearch(this.value)" 
+                       placeholder="ابحث عن قطعة غيار..." 
+                       data-i18n-ph="search_ph_mob"
+                       class="w-full bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg py-2 px-3 pr-9 text-sm focus:outline-none focus:ring-2 focus:ring-burgundy dark:text-white">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-gray-400"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Developer Auth Password Modal (Passkey: 2577) -->
+    <div id="dev-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white dark:bg-darkcard w-full max-w-sm rounded-2xl p-6 shadow-2xl border border-gray-200 dark:border-gray-800 relative">
+            <button onclick="toggleDevAuthModal()" class="absolute top-4 left-4 text-gray-400 hover:text-gray-600 dark:hover:text-white">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <div class="text-center mb-4">
+                <div class="w-12 h-12 bg-burgundy/10 text-burgundy rounded-full flex items-center justify-center mx-auto mb-2 text-xl font-black">
+                    <i class="fa-solid fa-user-lock"></i>
+                </div>
+                <h3 class="text-base font-extrabold text-gray-900 dark:text-white">دخول لوحة التحكم والمطور</h3>
+                <p class="text-xs text-gray-500 mt-1">أدخل كلمة المرور الخاصة بالمطور للمتابعة</p>
+            </div>
+
+            <form onsubmit="verifyDevPasskey(event)">
+                <input type="password" id="dev-passkey-input" placeholder="كلمة السر..." required 
+                       class="w-full text-center tracking-widest text-lg font-bold p-2.5 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl mb-3 dark:text-white focus:outline-none focus:ring-2 focus:ring-burgundy">
+                
+                <p id="dev-error-msg" class="text-xs text-red-600 font-bold text-center mb-3 hidden">
+                    <i class="fa-solid fa-circle-xmark ml-1"></i> كلمة المرور غير صحيحة!
+                </p>
+
+                <button type="submit" class="w-full bg-burgundy hover:bg-burgundy-dark text-white font-bold py-2.5 rounded-xl text-xs transition">
+                    تأكيد الدخول
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Developer Control Panel -->
+    <section id="dev-panel" class="hidden bg-amber-50 dark:bg-gray-900 border-b-2 border-amber-500 py-6 px-4 transition-all">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-wrap items-center justify-between mb-4 border-b border-amber-200 dark:border-gray-800 pb-3 gap-2">
+                <div class="flex items-center space-x-2 space-x-reverse text-amber-900 dark:text-amber-400">
+                    <i class="fa-solid fa-sliders text-xl"></i>
+                    <h2 class="font-black text-lg">لوحة التحكم وإدارة المخزون (خاصة بالمطور)</h2>
+                </div>
+                <div class="flex items-center space-x-2 space-x-reverse">
+                    <button onclick="resetDefaultProducts()" class="bg-gray-600 hover:bg-gray-700 text-white text-xs px-3 py-1.5 rounded-lg font-bold transition">
+                        <i class="fa-solid fa-rotate-left ml-1"></i> استعادة الافتراضي
+                    </button>
+                    <button onclick="lockDevMode()" class="bg-red-700 hover:bg-red-800 text-white text-xs px-3 py-1.5 rounded-lg font-bold transition">
+                        <i class="fa-solid fa-lock ml-1"></i> إغلاق اللوحة
+                    </button>
+                </div>
+            </div>
+
+            <!-- Add Product Form -->
+            <form id="add-product-form" onsubmit="handleAddProduct(event)" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3 bg-white dark:bg-darkcard p-4 rounded-xl shadow-inner border border-amber-200 dark:border-gray-800">
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">اسم المنتج / الجهاز *</label>
+                    <input type="text" id="p-title" required placeholder="مثال: خلاط مجمع يدوي 500 واط" class="w-full text-xs p-2 rounded bg-gray-50 dark:bg-gray-800 border dark:border-gray-700 dark:text-white">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">السعر (ج.م) *</label>
+                    <input type="number" id="p-price" min="1" required placeholder="450" class="w-full text-xs p-2 rounded bg-gray-50 dark:bg-gray-800 border dark:border-gray-700 dark:text-white">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">الكمية المتاحة بالمخزن *</label>
+                    <input type="number" id="p-stock" min="0" required placeholder="5" class="w-full text-xs p-2 rounded bg-gray-50 dark:bg-gray-800 border dark:border-gray-700 dark:text-white">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">التصنيف *</label>
+                    <select id="p-appliance" required class="w-full text-xs p-2 rounded bg-gray-50 dark:bg-gray-800 border dark:border-gray-700 dark:text-white">
+                        <option value="أجهزة مجمعة">⭐ أجهزة مجمعة</option>
+                        <option value="غسالات">غسالات</option>
+                        <option value="ثلاجات">ثلاجات</option>
+                        <option value="بوتاجازات">بوتاجازات</option>
+                        <option value="سخانات">سخانات</option>
+                        <option value="مكيفات">مكيفات</option>
+                        <option value="ميكروويف">ميكروويف</option>
+                        <option value="مستلزمات دش وتليفزيون">مستلزمات دش وتليفزيون</option>
+                        <option value="بطاريات">بطاريات</option>
+                        <option value="خلاطات">خلاطات</option>
+                        <option value="مفارم لحمة">مفارم لحمة</option>
+                        <option value="محضرة طعام">محضرة طعام</option>
+                        <option value="أخرى">أخرى</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">الماركة / المصدر *</label>
+                    <select id="p-brand" required class="w-full text-xs p-2 rounded bg-gray-50 dark:bg-gray-800 border dark:border-gray-700 dark:text-white">
+                        <option value="تجميع يدوي - فكسفاي">تجميع يدوي - فكسفاي</option>
+                        <option value="توشيبا">توشيبا (Toshiba)</option>
+                        <option value="زنوسي">زنوسي (Zanussi)</option>
+                        <option value="كريازي">كريازي (Kiriazi)</option>
+                        <option value="إل جي">إل جي (LG)</option>
+                        <option value="سامسونج">سامسونج (Samsung)</option>
+                        <option value="براون">براون (Braun)</option>
+                        <option value="مولينكس">مولينكس (Moulinex)</option>
+                        <option value="أخرى">أخرى</option>
+                    </select>
+                </div>
+
+                <div class="md:col-span-2">
+                    <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">رفع صورة المنتج من الجهاز</label>
+                    <input type="file" id="p-image-file" accept="image/*" onchange="previewSelectedImage(this)" class="w-full text-xs p-1.5 rounded bg-gray-50 dark:bg-gray-800 border dark:border-gray-700 dark:text-white cursor-pointer file:ml-2 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-burgundy file:text-white hover:file:bg-burgundy-dark">
+                    <input type="hidden" id="p-image-base64">
+                </div>
+
+                <div class="md:col-span-2">
+                    <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">المواصفات والوصف</label>
+                    <input type="text" id="p-desc" placeholder="المواصفات والتفاصيل..." class="w-full text-xs p-2 rounded bg-gray-50 dark:bg-gray-800 border dark:border-gray-700 dark:text-white">
+                </div>
+
+                <div class="flex items-end">
+                    <button type="submit" class="w-full bg-burgundy hover:bg-burgundy-dark text-white font-bold text-xs py-2.5 px-4 rounded-lg shadow transition flex items-center justify-center">
+                        <i class="fa-solid fa-plus ml-1"></i> إضافة للمتجر
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6">
+
+        <!-- Hero Section -->
+        <section class="bg-gradient-to-r from-burgundy-dark to-burgundy rounded-2xl p-6 sm:p-8 text-white shadow-xl mb-6 relative overflow-hidden">
+            <div class="relative z-10 max-w-2xl">
+                <span class="bg-amber-400 text-black text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block shadow" data-i18n="quality_badge">
+                    ضمان جودة وتوافق 100%
+                </span>
+                <h2 class="text-2xl sm:text-4xl font-extrabold leading-tight mb-3" data-i18n="hero_title">
+                    قطع غيار أصلية وأجهزة مجمعة عالية الجودة
+                </h2>
+                <p class="text-gray-200 text-sm sm:text-base mb-6" data-i18n="hero_desc">
+                    نوفر لك جميع المكونات والأجهزة مع توصيل سريع لجميع المحافظات والدفع عند الاستلام.
+                </p>
+
+                <!-- Model Finder Tool -->
+                <div class="bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/20">
+                    <h3 class="text-xs font-bold text-amber-300 mb-2 flex items-center">
+                        <i class="fa-solid fa-filter ml-1"></i> <span data-i18n="filter_title">تصفية وتحديد الأقسام السريعة:</span>
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        <select id="finder-appliance" onchange="applyFilters()" class="bg-gray-900/80 text-white text-xs p-2 rounded border border-white/30 focus:outline-none">
+                            <option value="all" data-i18n="all_depts">جميع الأقسام والأجهزة</option>
+                            <option value="أجهزة مجمعة">⭐ أجهزة مجمعة</option>
+                            <option value="غسالات">غسالات</option>
+                            <option value="ثلاجات">ثلاجات</option>
+                            <option value="بوتاجازات">بوتاجازات</option>
+                            <option value="سخانات">سخانات</option>
+                            <option value="مكيفات">مكيفات</option>
+                            <option value="مستلزمات دش وتليفزيون">مستلزمات دش وتليفزيون</option>
+                            <option value="بطاريات">بطاريات</option>
+                            <option value="خلاطات">خلاطات</option>
+                            <option value="مفارم لحمة">مفارم لحمة</option>
+                            <option value="محضرة طعام">محضرة طعام</option>
+                            <option value="أخرى">أخرى</option>
+                        </select>
+
+                        <select id="finder-brand" onchange="applyFilters()" class="bg-gray-900/80 text-white text-xs p-2 rounded border border-white/30 focus:outline-none">
+                            <option value="all" data-i18n="all_brands">جميع الماركات</option>
+                            <option value="تجميع يدوي - فكسفاي">تجميع يدوي - فكسفاي</option>
+                            <option value="توشيبا">توشيبا</option>
+                            <option value="زنوسي">زنوسي</option>
+                            <option value="كريازي">كريازي</option>
+                            <option value="إل جي">إل جي</option>
+                            <option value="سامسونج">سامسونج</option>
+                            <option value="براون">براون</option>
+                            <option value="مولينكس">مولينكس</option>
+                        </select>
+
+                        <button onclick="resetFilters()" class="bg-amber-400 hover:bg-amber-500 text-black font-extrabold text-xs p-2 rounded transition flex items-center justify-center">
+                            <i class="fa-solid fa-arrows-rotate ml-1"></i> <span data-i18n="reset">إعادة ضبط</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <i class="fa-solid fa-gears absolute -left-10 -bottom-10 text-[200px] text-white/5 pointer-events-none"></i>
+        </section>
+
+        <!-- Assembled Appliances Warranty Banner Notice -->
+        <div id="assembled-warranty-banner" class="hidden bg-gradient-to-r from-amber-500/20 via-amber-400/10 to-amber-500/20 border-2 border-amber-500 p-4 rounded-2xl mb-6 shadow-md">
+            <div class="flex items-start space-x-3 space-x-reverse">
+                <div class="bg-amber-500 text-black p-3 rounded-xl text-xl font-black shrink-0 mt-0.5">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <div>
+                    <h3 class="text-sm sm:text-base font-extrabold text-amber-900 dark:text-amber-300 flex items-center gap-2">
+                        <span>ضمان الأجهزة المجمعة يدوياً</span>
+                        <span class="bg-amber-500 text-black text-[10px] px-2 py-0.5 rounded-md font-black">ضمان 6 أشهر</span>
+                    </h3>
+                    <p class="text-xs text-gray-700 dark:text-gray-200 mt-1 leading-relaxed font-medium">
+                        تم تقفيل وتجميع هذه الأجهزة يدوياً بإتقان شديد وعناية فائقة بأيدي فنيين متخصصين. تأتي جميع الأجهزة المجمعة مع <strong>ضمان لمدة 6 أشهر ضد عيوب الصناعة والتقفيل</strong>، علماً بأن الضمان لا يشمل الأعطال الناتجة عن سوء الاستخدام أو الصدمات الكهربائية.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category Headers & Pills -->
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white flex items-center">
+                <i class="fa-solid fa-boxes-stacked ml-2 text-burgundy"></i> <span data-i18n="browse_products">تصفح المنتجات المتاحة</span>
+            </h3>
+            <span id="product-count" class="text-xs text-gray-500 dark:text-gray-400 font-bold"></span>
+        </div>
+
+        <!-- Category Filter Pills -->
+        <div class="flex items-center gap-2 overflow-x-auto pb-4 mb-6 text-sm no-scrollbar">
+            <button onclick="filterByAppliance('all')" class="app-pill active px-4 py-2 rounded-full font-bold whitespace-nowrap border transition text-xs bg-burgundy text-white border-burgundy" data-appliance="all" data-i18n="cat_all">
+                الكل
+            </button>
+
+            <!-- Recommended Button / زر مقترح لك -->
+            <button onclick="filterByRecommended()" class="app-pill px-4 py-2 rounded-full font-bold whitespace-nowrap border transition text-xs bg-gradient-to-r from-amber-500 to-amber-600 text-black border-amber-400 hover:scale-105 shadow-md flex items-center gap-1" data-appliance="recommended">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> <span data-i18n="cat_recommended">🔥 مقترح لك</span>
+            </button>
+
+            <button onclick="filterByAppliance('أجهزة مجمعة')" class="app-pill px-4 py-2 rounded-full font-bold whitespace-nowrap border transition text-xs bg-amber-100 text-amber-900 border-amber-400 hover:bg-amber-200 dark:bg-amber-900/40 dark:text-amber-300" data-appliance="أجهزة مجمعة">
+                <i class="fa-solid fa-screwdriver-wrench ml-1"></i> ⭐ أجهزة مجمعة (ضمان 6 أشهر)
+            </button>
+            <button onclick="filterByAppliance('غسالات')" class="app-pill px-4 py-2 rounded-full font-bold whitespace-nowrap border transition text-xs bg-white dark:bg-darkcard text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-700 hover:border-burgundy" data-appliance="غسالات">
+                <i class="fa-solid fa-soap ml-1"></i> قطع الغسالات
+            </button>
+            <button onclick="filterByAppliance('ثلاجات')" class="app-pill px-4 py-2 rounded-full font-bold whitespace-nowrap border transition text-xs bg-white dark:bg-darkcard text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-700 hover:border-burgundy" data-appliance="ثلاجات">
+                <i class="fa-solid fa-snowflake ml-1"></i> قطع الثلاجات
+            </button>
+            <button onclick="filterByAppliance('بوتاجازات')" class="app-pill px-4 py-2 rounded-full font-bold whitespace-nowrap border transition text-xs bg-white dark:bg-darkcard text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-700 hover:border-burgundy" data-appliance="بوتاجازات">
+                <i class="fa-solid fa-fire ml-1"></i> قطع البوتاجازات
+            </button>
+            <button onclick="filterByAppliance('سخانات')" class="app-pill px-4 py-2 rounded-full font-bold whitespace-nowrap border transition text-xs bg-white dark:bg-darkcard text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-700 hover:border-burgundy" data-appliance="سخانات">
+                <i class="fa-solid fa-temperature-arrow-up ml-1"></i> قطع السخانات
+            </button>
+            <button onclick="filterByAppliance('مكيفات')" class="app-pill px-4 py-2 rounded-full font-bold whitespace-nowrap border transition text-xs bg-white dark:bg-darkcard text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-700 hover:border-burgundy" data-appliance="مكيفات">
+                <i class="fa-solid fa-wind ml-1"></i> قطع التكييف
+            </button>
+            <button onclick="filterByAppliance('مستلزمات دش وتليفزيون')" class="app-pill px-4 py-2 rounded-full font-bold whitespace-nowrap border transition text-xs bg-white dark:bg-darkcard text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-700 hover:border-burgundy" data-appliance="مستلزمات دش وتليفزيون">
+                <i class="fa-solid fa-tv ml-1"></i> مستلزمات دش وتليفزيون
+            </button>
+            <button onclick="filterByAppliance('بطاريات')" class="app-pill px-4 py-2 rounded-full font-bold whitespace-nowrap border transition text-xs bg-white dark:bg-darkcard text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-700 hover:border-burgundy" data-appliance="بطاريات">
+                <i class="fa-solid fa-battery-full ml-1"></i> بطاريات
+            </button>
+            <button onclick="filterByAppliance('خلاطات')" class="app-pill px-4 py-2 rounded-full font-bold whitespace-nowrap border transition text-xs bg-white dark:bg-darkcard text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-700 hover:border-burgundy" data-appliance="خلاطات">
+                <i class="fa-solid fa-blender ml-1"></i> خلاطات
+            </button>
+            <button onclick="filterByAppliance('مفارم لحمة')" class="app-pill px-4 py-2 rounded-full font-bold whitespace-nowrap border transition text-xs bg-white dark:bg-darkcard text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-700 hover:border-burgundy" data-appliance="مفارم لحمة">
+                <i class="fa-solid fa-drumstick-bite ml-1"></i> مفارم لحمة
+            </button>
+            <button onclick="filterByAppliance('محضرة طعام')" class="app-pill px-4 py-2 rounded-full font-bold whitespace-nowrap border transition text-xs bg-white dark:bg-darkcard text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-700 hover:border-burgundy" data-appliance="محضرة طعام">
+                <i class="fa-solid fa-kitchen-set ml-1"></i> محضرة طعام
+            </button>
+            <button onclick="filterByAppliance('أخرى')" class="app-pill px-4 py-2 rounded-full font-bold whitespace-nowrap border transition text-xs bg-white dark:bg-darkcard text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-700 hover:border-burgundy" data-appliance="أخرى">
+                <i class="fa-solid fa-ellipsis ml-1"></i> أخرى
+            </button>
+        </div>
+
+        <!-- Products Grid Container -->
+        <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+
+        <!-- No Results Fallback -->
+        <div id="no-results" class="hidden text-center py-16">
+            <i class="fa-solid fa-magnifying-glass-minus text-5xl text-gray-400 mb-3"></i>
+            <h3 class="text-base font-bold text-gray-700 dark:text-gray-300" data-i18n="no_results">لم نجد أي نتائج تطابق بحثك</h3>
+            <p class="text-xs text-gray-500 mt-1" data-i18n="no_results_sub">تأكد من اختيار قسم آخر أو كتابة مسمى آخر في خانة البحث</p>
+        </div>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="bg-gray-900 text-gray-300 pt-10 pb-6 border-t border-gray-800 mt-12">
+        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 mb-8 text-xs">
+            <div>
+                <div class="flex items-center space-x-2 space-x-reverse mb-3">
+                    <div class="w-8 h-8 bg-burgundy rounded-lg flex items-center justify-center text-white font-black">
+                        <i class="fa-solid fa-wrench"></i>
+                    </div>
+                    <h4 class="text-base font-black text-white">fixify - فكسفاي</h4>
+                </div>
+                <p class="text-gray-400 leading-relaxed mb-3">
+                    المتجر المتخصص الأكبر لبيع وتوفير جميع قطع غيار الأجهزة المنزلية والأجهزة المجمعة يدوياً بضمان الجودة.
+                </p>
+            </div>
+
+            <div>
+                <h4 class="text-sm font-bold text-white mb-3 border-b border-gray-800 pb-2">روابط سريعة</h4>
+                <ul class="space-y-2">
+                    <li><a href="https://wa.me/message/B7RAZYGB5ZJ6D1" target="_blank" class="hover:text-amber-400 transition"><i class="fa-brands fa-whatsapp ml-1"></i> الدعم الفني والطلب المباشر</a></li>
+                    <li><a href="https://wa.me/qr/6I3QMEUTVJD7C1" target="_blank" class="hover:text-amber-400 transition"><i class="fa-solid fa-bullhorn ml-1"></i> تقديم شكوى أو اقتراح</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-sm font-bold text-white mb-3 border-b border-gray-800 pb-2">خدمة العملاء</h4>
+                <p class="text-gray-400 mb-2">تواصل معنا فوراً للحصول على استشارة فنية أو التأكد من مطابقة قطعة الغيار لجهازك.</p>
+                <div class="flex items-center space-x-3 space-x-reverse text-amber-400 font-bold">
+                    <i class="fa-solid fa-headset text-lg"></i>
+                    <span>متاحين على مدار الساعة</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="border-t border-gray-800 pt-4 text-center">
+            <p class="text-xs text-gray-400 font-medium">
+                جميع الحقوق محفوظة © <span class="text-white font-bold">fixify - فكسفاي</span> 2026
+            </p>
+            <p class="text-sm font-black text-amber-400 mt-2 tracking-wide flex items-center justify-center gap-1">
+                <i class="fa-solid fa-star text-xs"></i> تحت رعاية أولاد شوقي <i class="fa-solid fa-star text-xs"></i>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Edit Stock Modal -->
+    <div id="edit-stock-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white dark:bg-darkcard w-full max-w-sm rounded-2xl p-6 shadow-2xl border border-gray-200 dark:border-gray-800 relative">
+            <button onclick="closeEditStockModal()" class="absolute top-4 left-4 text-gray-400 hover:text-gray-600">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <h3 id="edit-stock-title" class="text-base font-bold text-gray-900 dark:text-white mb-4">تعديل كمية المخزون</h3>
+            
+            <input type="hidden" id="edit-stock-prod-id">
+            <div class="mb-4">
+                <label class="block text-xs font-bold text-gray-600 dark:text-gray-400 mb-1">الكمية الجديدة بالمخزن:</label>
+                <input type="number" id="edit-stock-qty" min="0" required class="w-full text-center text-lg font-bold p-2 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg dark:text-white">
+            </div>
+
+            <div class="flex space-x-2 space-x-reverse">
+                <button onclick="saveStockEdit()" class="flex-1 bg-burgundy hover:bg-burgundy-dark text-white font-bold py-2 rounded-lg text-xs transition">
+                    حفظ التعديل
+                </button>
+                <button onclick="closeEditStockModal()" class="bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-white px-4 py-2 rounded-lg text-xs font-bold">
+                    إلغاء
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Reviews Modal -->
+    <div id="reviews-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white dark:bg-darkcard w-full max-w-lg rounded-2xl p-6 shadow-2xl border border-gray-200 dark:border-gray-800 max-h-[90vh] flex flex-col relative">
+            <button onclick="closeReviewsModal()" class="absolute top-4 left-4 text-gray-400 hover:text-gray-600 dark:hover:text-white">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <h3 id="reviews-modal-title" class="text-base font-bold text-burgundy dark:text-burgundy-light mb-2">تقييمات وآراء العملاء</h3>
+            
+            <div id="reviews-list-container" class="flex-1 overflow-y-auto my-3 space-y-3 pr-1 text-xs"></div>
+
+            <div class="pt-3 border-t border-gray-200 dark:border-gray-800">
+                <h4 class="text-xs font-bold mb-2 text-gray-700 dark:text-gray-300">أضف تقييمك:</h4>
+                <form onsubmit="handleAddReview(event)" class="space-y-2">
+                    <input type="hidden" id="review-prod-id">
+                    <div class="flex gap-2">
+                        <input type="text" id="review-author" required placeholder="اسمك الكريم" class="w-1/2 p-2 text-xs bg-gray-100 dark:bg-gray-800 border rounded dark:text-white">
+                        <select id="review-rating" class="w-1/2 p-2 text-xs bg-gray-100 dark:bg-gray-800 border rounded dark:text-white">
+                            <option value="5">⭐⭐⭐⭐⭐ (5/5 ممتاز)</option>
+                            <option value="4">⭐⭐⭐⭐ (4/5 جيد جداً)</option>
+                            <option value="3">⭐⭐⭐ (3/5 مقبول)</option>
+                        </select>
+                    </div>
+                    <textarea id="review-comment" required placeholder="اكتب تعليقك وتجربتك هنا..." rows="2" class="w-full p-2 text-xs bg-gray-100 dark:bg-gray-800 border rounded dark:text-white"></textarea>
+                    <button type="submit" class="w-full bg-burgundy hover:bg-burgundy-dark text-white font-bold py-2 rounded text-xs transition">
+                        إرسال التقييم
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Drawer -->
+    <div id="cart-drawer-backdrop" onclick="toggleCartDrawer()" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden"></div>
+    <div id="cart-drawer" class="fixed top-0 left-0 bottom-0 w-full max-w-md bg-white dark:bg-darkcard shadow-2xl z-50 transform -translate-x-full transition-transform duration-300 flex flex-col">
+        <div class="p-4 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between bg-burgundy text-white">
+            <div class="flex items-center space-x-2 space-x-reverse">
+                <i class="fa-solid fa-cart-shopping text-lg"></i>
+                <h3 class="font-extrabold text-base" data-i18n="cart_title">سلة الشراء الخاصة بك</h3>
+            </div>
+            <button onclick="toggleCartDrawer()" class="text-white/80 hover:text-white">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+        </div>
+
+        <div id="cart-items" class="flex-1 overflow-y-auto p-4 space-y-3"></div>
+
+        <div class="p-4 border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900">
+            <div class="flex justify-between items-center mb-3">
+                <span class="text-xs font-bold text-gray-500 dark:text-gray-400" data-i18n="cart_total">إجمالي الطلب:</span>
+                <span id="cart-total" class="text-lg font-black text-burgundy dark:text-burgundy-light">0 ج.م</span>
+            </div>
+
+            <button onclick="openCustomerDetailsModal()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl shadow-lg transition flex items-center justify-center space-x-2 space-x-reverse mb-2 text-sm">
+                <i class="fa-solid fa-truck-fast text-lg ml-1"></i>
+                <span data-i18n="checkout_btn">متابعة الشحن والتأكيد</span>
+            </button>
+            <p class="text-[10px] text-center text-gray-500" data-i18n="checkout_note">سيتم تجميع بيانات العنوان وتوجيه الطلب للفني فوراً.</p>
+        </div>
+    </div>
+
+    <!-- Customer Details & Delivery Form Modal -->
+    <div id="checkout-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white dark:bg-darkcard w-full max-w-md rounded-2xl p-6 shadow-2xl border border-gray-200 dark:border-gray-800 max-h-[90vh] overflow-y-auto relative">
+            <button onclick="closeCheckoutModal()" class="absolute top-4 left-4 text-gray-400 hover:text-gray-600 dark:hover:text-white">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <div class="text-center mb-4">
+                <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-2 text-2xl font-black">
+                    <i class="fa-solid fa-clipboard-list"></i>
+                </div>
+                <h3 class="text-base font-extrabold text-gray-900 dark:text-white">بيانات الشحن والتوصيل</h3>
+                <p class="text-xs text-gray-500 mt-1">يرجى ملء البيانات بدقة لضمان سرعة التوصيل</p>
+            </div>
+
+            <form onsubmit="submitCustomerOrder(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">الاسم بالكامل *</label>
+                    <input type="text" id="cust-name" required placeholder="مثال: أحمد محمد علي" class="w-full p-2.5 text-xs bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl dark:text-white focus:outline-none focus:ring-2 focus:ring-burgundy">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">رقم الهاتف (للتواصل والتسليم) *</label>
+                    <input type="tel" id="cust-phone" pattern="[0-9]{11}" required placeholder="مثال: 01012345678" class="w-full p-2.5 text-xs bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl dark:text-white focus:outline-none focus:ring-2 focus:ring-burgundy">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">المحافظة *</label>
+                    <select id="cust-gov" required class="w-full p-2.5 text-xs bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl dark:text-white focus:outline-none focus:ring-2 focus:ring-burgundy">
+                        <option value="" disabled selected>اختر المحافظة من القائمة...</option>
+                        <option value="القاهرة">القاهرة</option>
+                        <option value="الجيزة">الجيزة</option>
+                        <option value="الإسكندرية">الإسكندرية</option>
+                        <option value="القليوبية">القليوبية</option>
+                        <option value="الشرقية">الشرقية</option>
+                        <option value="الدقهلية">الدقهلية</option>
+                        <option value="البحيرة">البحيرة</option>
+                        <option value="المنوفية">المنوفية</option>
+                        <option value="الغربية">الغربية</option>
+                        <option value="كفر الشيخ">كفر الشيخ</option>
+                        <option value="دمياط">دمياط</option>
+                        <option value="بورسعيد">بورسعيد</option>
+                        <option value="الإسماعيلية">الإسماعيلية</option>
+                        <option value="السويس">السويس</option>
+                        <option value="الفيوم">الفيوم</option>
+                        <option value="بني سويف">بني سويف</option>
+                        <option value="المنيا">المنيا</option>
+                        <option value="أسيوط">أسيوط</option>
+                        <option value="سوهاج">سوهاج</option>
+                        <option value="قنا">قنا</option>
+                        <option value="الأقصر">الأقصر</option>
+                        <option value="أسوان">أسوان</option>
+                        <option value="البحر الأحمر">البحر الأحمر</option>
+                        <option value="مطروح">مطروح</option>
+                        <option value="الوادي الجديد">الوادي الجديد</option>
+                        <option value="شمال سيناء">شمال سيناء</option>
+                        <option value="جنوب سيناء">جنوب سيناء</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">العنوان التفصيلي (المنطقة / الشارع / رقم العقار) *</label>
+                    <textarea id="cust-address" required rows="2" placeholder="مثال: الشارع الرئيسي، بجوار مسجد السلام، عمارة 15، الشقة 4" class="w-full p-2.5 text-xs bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl dark:text-white focus:outline-none focus:ring-2 focus:ring-burgundy"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">الوقت المفضل للاستلام *</label>
+                    <select id="cust-time" required class="w-full p-2.5 text-xs bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl dark:text-white focus:outline-none focus:ring-2 focus:ring-burgundy">
+                        <option value="صباحاً (من 9 صباحاً - 1 ظهراً)">صباحاً (من 9:00 ص - 1:00 ظ)</option>
+                        <option value="ظهراً (من 1 ظهراً - 5 عصراً)">ظهراً (من 1:00 ظ - 5:00 م)</option>
+                        <option value="مساءً (من 5 عصراً - 9 مساءً)">مساءً (من 5:00 م - 9:00 م)</option>
+                        <option value="أي وقت خلال اليوم">أي وقت خلال اليوم</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl shadow-lg transition text-xs mt-2 flex items-center justify-center space-x-2 space-x-reverse">
+                    <i class="fa-solid fa-check-circle text-base"></i>
+                    <span>تأكيد وإرسال الطلب</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Order Confirmation Modal -->
+    <div id="order-success-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white dark:bg-darkcard w-full max-w-sm rounded-2xl p-6 shadow-2xl text-center border border-gray-200 dark:border-gray-800">
+            <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-3 text-3xl font-black">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <h3 class="text-lg font-black text-gray-900 dark:text-white">تم الطلب بنجاح!</h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-2 leading-relaxed">
+                شكراً لثقتكم بـ <strong>fixify - فكسفاي</strong>. سيتم توجيهك فوراً لإرسال التفاصيل عبر الواتساب للفني المختص.
+            </p>
+            <button onclick="closeSuccessAndRedirect()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs mt-4 transition">
+                متابعة وإرسال التفاصيل
+            </button>
+        </div>
+    </div>
+
+    <!-- Floating Direct WhatsApp Button -->
+    <a href="https://wa.me/message/B7RAZYGB5ZJ6D1" target="_blank" rel="noopener noreferrer" 
+       class="fixed bottom-6 left-6 z-40 bg-emerald-500 hover:bg-emerald-600 text-white p-4 rounded-full shadow-2xl transition-all hover:scale-110 flex items-center justify-center whatsapp-pulse"
+       title="تحدث مع الفني على الواتساب مباشرة">
+        <i class="fa-brands fa-whatsapp text-3xl"></i>
+    </a>
+
+    <!-- Notification Toast UI -->
+    <div id="toast" class="fixed bottom-20 right-6 z-50 bg-gray-900 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center space-x-2 space-x-reverse transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none text-xs">
+        <i id="toast-icon" class="fa-solid fa-circle-check text-emerald-400 text-base"></i>
+        <span id="toast-message">تمت العملية بنجاح!</span>
+    </div>
+
+    <!-- Application JavaScript -->
+    <script>
+        // Initial Products List
+        const defaultProducts = [
+            {
+                id: 'p0',
+                title: 'خلاط فكسفاي الاحترافي المجمع (موتور نحاس 600 واط)',
+                price: 780,
+                stock: 3,
+                appliance: 'أجهزة مجمعة',
+                brand: 'تجميع يدوي - فكسفاي',
+                image: 'https://placehold.co/400x300/800020/ffffff?text=Fixfy+Custom+Blender',
+                description: 'تم تقفيله وتجميعه يدوياً بمكونات ونحاس إيطالي مقوى. يشمل ضمان 6 أشهر ضد عيوب الصناعة والتقفيل.',
+                recommended: true,
+                reviews: [
+                    { author: 'حسن الجمال', rating: 5, comment: 'تقفيل محترم جداً وقوي، ما شاء الله.' }
+                ]
+            },
+            {
+                id: 'p1',
+                title: 'طلمبة طرد غسالة زنوسي أوتوماتيك',
+                price: 320,
+                stock: 5,
+                appliance: 'غسالات',
+                brand: 'زنوسي',
+                image: 'https://placehold.co/400x300/800020/ffffff?text=Zanussi+Pump',
+                description: 'طلمبة طرد مياه أصلية 100% مناسبة لكافة موديلات زنوسي الفول أوتوماتيك.',
+                recommended: true,
+                reviews: [
+                    { author: 'أحمد محمود', rating: 5, comment: 'قطعة ممتازة وركبت بسهولة تماماً.' }
+                ]
+            },
+            {
+                id: 'p2',
+                title: 'موتور ثلاجة توشيبا 1/4 حصان R134a',
+                price: 2450,
+                stock: 2,
+                appliance: 'ثلاجات',
+                brand: 'توشيبا',
+                image: 'https://placehold.co/400x300/600018/ffffff?text=Toshiba+Compressor',
+                description: 'كباش ثلاجة توشيبا أصلي عالي الكفاءة مع مكثف وقاطع وقاية.',
+                recommended: true,
+                reviews: [
+                    { author: 'إبراهيم علي', rating: 5, comment: 'شغال زي الفل وصوته هادي.' }
+                ]
+            },
+            {
+                id: 'p3',
+                title: 'كابل دش HD أصلية مقوى 20 متر مع وصلات LNB',
+                price: 180,
+                stock: 10,
+                appliance: 'مستلزمات دش وتليفزيون',
+                brand: 'أخرى',
+                image: 'https://placehold.co/400x300/121212/ffffff?text=Satellite+Cable',
+                description: 'كابل دش كوبر عالي الجودة مع عدسة وسويتش وتوافق مع كافة الريسيفرات.',
+                recommended: false,
+                reviews: []
+            },
+            {
+                id: 'p4',
+                title: 'شفاطة وسكينة خلاط براون الأصلي',
+                price: 260,
+                stock: 4,
+                appliance: 'خلاطات',
+                brand: 'براون',
+                image: 'https://placehold.co/400x300/800020/ffffff?text=Braun+Blender+Blade',
+                description: 'شفار وسلاح خلاط استيل غير قابل للصدأ من براون.',
+                recommended: false,
+                reviews: [
+                    { author: 'سارة أحمد', rating: 5, comment: 'ممتازة جداً وحادة زي الأصلية.' }
+                ]
+            }
+        ];
+
+        // i18n Translations
+        const i18n = {
+            ar: {
+                support: "خدمة العملاء والصيانة المعتمدة",
+                complaints: "قسم الشكاوى والاقتراحات",
+                dev_active: "وضع المطور مفعّل",
+                dev_panel: "لوحة المطور",
+                tagline: "قطع غيار الأجهزة المنزلية والأجهزة المجمعة",
+                search_ph: "ابحث عن قطعة غيار، جهاز مجمع، أو ماركة...",
+                search_ph_mob: "ابحث عن قطعة غيار...",
+                contact_us: "تواصل معنا",
+                quality_badge: "ضمان جودة وتوافق 100%",
+                hero_title: "قطع غيار أصلية وأجهزة مجمعة عالية الجودة",
+                hero_desc: "نوفر لك جميع المكونات والأجهزة مع توصيل سريع لجميع المحافظات والدفع عند الاستلام.",
+                filter_title: "تصفية وتحديد الأقسام السريعة:",
+                all_depts: "جميع الأقسام والأجهزة",
+                all_brands: "جميع الماركات",
+                reset: "إعادة ضبط",
+                browse_products: "تصفح المنتجات المتاحة",
+                cat_all: "الكل",
+                cat_recommended: "🔥 مقترح لك",
+                no_results: "لم نجد أي نتائج تطابق بحثك",
+                no_results_sub: "تأكد من اختيار قسم آخر أو كتابة مسمى آخر في خانة البحث",
+                cart_title: "سلة الشراء الخاصة بك",
+                cart_total: "إجمالي الطلب:",
+                checkout_btn: "متابعة الشحن والتأكيد",
+                checkout_note: "سيتم تجميع بيانات العنوان وتوجيه الطلب للفني فوراً."
+            },
+            en: {
+                support: "Customer Support & Certified Maintenance",
+                complaints: "Complaints & Suggestions",
+                dev_active: "Developer Mode Active",
+                dev_panel: "Dev Panel",
+                tagline: "Home Appliances Spare Parts & Assembled Units",
+                search_ph: "Search for spare part, assembled unit, brand...",
+                search_ph_mob: "Search spare parts...",
+                contact_us: "Contact Us",
+                quality_badge: "100% Quality & Compatibility Guaranteed",
+                hero_title: "Original Spare Parts & High Quality Assembled Units",
+                hero_desc: "We supply all components & appliances with fast delivery across all governorates & COD.",
+                filter_title: "Quick Category & Brand Filter:",
+                all_depts: "All Categories & Appliances",
+                all_brands: "All Brands",
+                reset: "Reset Filters",
+                browse_products: "Browse Available Products",
+                cat_all: "All",
+                cat_recommended: "🔥 Recommended",
+                no_results: "No matching products found",
+                no_results_sub: "Try searching with a different keyword or category",
+                cart_title: "Your Shopping Cart",
+                cart_total: "Total Amount:",
+                checkout_btn: "Proceed to Shipping & Confirm",
+                checkout_note: "Address details will be dispatched directly to technical support."
+            }
+        };
+
+        let currentLang = localStorage.getItem('fixfy_lang') || 'ar';
+
+        // Global States
+        let products = [];
+        try {
+            const stored = localStorage.getItem('fixfy_products');
+            products = stored ? JSON.parse(stored) : defaultProducts;
+        } catch(e) {
+            products = defaultProducts;
+        }
+
+        let cart = [];
+        try {
+            const storedCart = localStorage.getItem('fixfy_cart');
+            cart = storedCart ? JSON.parse(storedCart) : [];
+        } catch(e) {
+            cart = [];
+        }
+
+        let isDevUnlocked = sessionStorage.getItem('fixfy_dev_unlocked') === 'true';
+        let currentApplianceFilter = 'all';
+
+        // DOM Ready Load
+        document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            applyLanguage(currentLang);
+            renderProducts();
+            updateCartUI();
+            checkDevState();
+        });
+
+        // -------------------------------------------------------------
+        // Language Toggle Logic
+        // -------------------------------------------------------------
+        function toggleLanguage() {
+            currentLang = currentLang === 'ar' ? 'en' : 'ar';
+            localStorage.setItem('fixfy_lang', currentLang);
+            applyLanguage(currentLang);
+        }
+
+        function applyLanguage(lang) {
+            document.documentElement.lang = lang;
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+
+            document.getElementById('lang-btn-text').innerText = lang === 'ar' ? 'English' : 'عربي';
+
+            // Text elements translation
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[lang][key]) {
+                    el.innerText = i18n[lang][key];
+                }
+            });
+
+            // Placeholder translation
+            document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+                const key = el.getAttribute('data-i18n-ph');
+                if (i18n[lang][key]) {
+                    el.placeholder = i18n[lang][key];
+                }
+            });
+        }
+
+        // -------------------------------------------------------------
+        // Recommended Items Filter
+        // -------------------------------------------------------------
+        function filterByRecommended() {
+            currentApplianceFilter = 'recommended';
+            document.querySelectorAll('.app-pill').forEach(btn => {
+                if (btn.dataset.appliance === 'recommended') {
+                    btn.className = "app-pill active px-4 py-2 rounded-full font-bold whitespace-nowrap border transition text-xs bg-amber-500 text-black border-amber-400 shadow-md flex items-center gap-1";
+                } else {
+                    btn.className = "app-pill px-4 py-2 rounded-full font-bold whitespace-nowrap border transition text-xs bg-white dark:bg-darkcard text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-700 hover:border-burgundy";
+                }
+            });
+            renderProducts();
+        }
+
+        // -------------------------------------------------------------
+        // Theme Toggle
+        // -------------------------------------------------------------
+        function initTheme() {
+            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+                document.getElementById('theme-icon').className = 'fa-solid fa-sun text-amber-300';
+            } else {
+                document.documentElement.classList.remove('dark');
+                document.getElementById('theme-icon').className = 'fa-solid fa-moon text-sm';
+            }
+        }
+
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+                document.getElementById('theme-icon').className = 'fa-solid fa-moon text-sm';
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+                document.getElementById('theme-icon').className = 'fa-solid fa-sun text-amber-300';
+            }
+        }
+
+        // -------------------------------------------------------------
+        // Dev Panel & Password Logic (Password: 2577)
+        // -------------------------------------------------------------
+        function handleDevButtonClick() {
+            if (isDevUnlocked) {
+                const devPanel = document.getElementById('dev-panel');
+                if (devPanel.classList.contains('hidden')) {
+                    devPanel.classList.remove('hidden');
+                    devPanel.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    devPanel.classList.add('hidden');
+                    showToast(currentLang === 'ar' ? 'تم إخفاء لوحة التحكم' : 'Control panel hidden', 'info');
+                }
+            } else {
+                toggleDevAuthModal();
+            }
+        }
+
+        function toggleDevAuthModal() {
+            const modal = document.getElementById('dev-modal');
+            modal.classList.toggle('hidden');
+            document.getElementById('dev-passkey-input').value = '';
+            document.getElementById('dev-error-msg').classList.add('hidden');
+        }
+
+        function verifyDevPasskey(e) {
+            e.preventDefault();
+            const input = document.getElementById('dev-passkey-input').value.trim();
+            
+            // Password: 2577
+            if (input === '2577') {
+                isDevUnlocked = true;
+                sessionStorage.setItem('fixfy_dev_unlocked', 'true');
+                document.getElementById('dev-modal').classList.add('hidden');
+                checkDevState();
+                showToast(currentLang === 'ar' ? 'تم تفعيل وضع المطور بنجاح!' : 'Developer Mode Activated!', 'success');
+                renderProducts();
+            } else {
+                document.getElementById('dev-error-msg').classList.remove('hidden');
+            }
+        }
+
+        function checkDevState() {
+            const devPanel = document.getElementById('dev-panel');
+            const devBadge = document.getElementById('dev-mode-badge');
+            const devBtnText = document.getElementById('dev-button-text');
+
+            if (isDevUnlocked) {
+                devPanel.classList.remove('hidden');
+                devBadge.classList.remove('hidden');
+                devBadge.classList.add('flex');
+                devBtnText.innerText = currentLang === 'ar' ? 'لوحة التحكم' : 'Control Panel';
+            } else {
+                devPanel.classList.add('hidden');
+                devBadge.classList.add('hidden');
+                devBadge.classList.remove('flex');
+                devBtnText.innerText = currentLang === 'ar' ? 'لوحة المطور' : 'Dev Panel';
+            }
+        }
+
+        function previewSelectedImage(fileInput) {
+            const file = fileInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('p-image-base64').value = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                document.getElementById('p-image-base64').value = '';
+            }
+        }
+
+        function lockDevMode() {
+            isDevUnlocked = false;
+            sessionStorage.removeItem('fixfy_dev_unlocked');
+            checkDevState();
+            renderProducts();
+            showToast(currentLang === 'ar' ? 'تم إغلاق لوحة التحكم بنجاح' : 'Dev Mode Locked', 'info');
+        }
+
+        function handleAddProduct(e) {
+            e.preventDefault();
+            const title = document.getElementById('p-title').value.trim();
+            const price = parseFloat(document.getElementById('p-price').value);
+            const stock = parseInt(document.getElementById('p-stock').value);
+            const appliance = document.getElementById('p-appliance').value;
+            const brand = document.getElementById('p-brand').value;
+            const uploadedImg = document.getElementById('p-image-base64').value;
+            const image = uploadedImg || `https://placehold.co/400x300/800020/ffffff?text=${encodeURIComponent(title)}`;
+            const description = document.getElementById('p-desc').value.trim() || 'منتج معتمد عالي الجودة.';
+
+            const newProd = {
+                id: 'p_' + Date.now(),
+                title,
+                price,
+                stock,
+                appliance,
+                brand,
+                image,
+                description,
+                recommended: true,
+                reviews: []
+            };
+
+            products.unshift(newProd);
+            saveProductsToStorage();
+            renderProducts();
+            document.getElementById('add-product-form').reset();
+            document.getElementById('p-image-base64').value = '';
+            showToast(currentLang === 'ar' ? 'تمت إضافة المنتج للمتجر بنجاح' : 'Product added successfully');
+        }
+
+        function deleteProduct(id) {
+            if (confirm(currentLang === 'ar' ? 'هل أنت تأكد من إزالة هذا المنتج نهائياً من المتجر؟' : 'Are you sure you want to remove this product?')) {
+                products = products.filter(p => p.id !== id);
+                saveProductsToStorage();
+                renderProducts();
+                showToast(currentLang === 'ar' ? 'تم حذف المنتج بنجاح' : 'Product deleted successfully');
+            }
+        }
+
+        function openEditStockModal(id) {
+            const prod = products.find(p => p.id === id);
+            if (!prod) return;
+            document.getElementById('edit-stock-prod-id').value = id;
+            document.getElementById('edit-stock-qty').value = prod.stock;
+            document.getElementById('edit-stock-title').innerText = `تعديل مخزون: ${prod.title}`;
+            document.getElementById('edit-stock-modal').classList.remove('hidden');
+        }
+
+        function closeEditStockModal() {
+            document.getElementById('edit-stock-modal').classList.add('hidden');
+        }
+
+        function saveStockEdit() {
+            const id = document.getElementById('edit-stock-prod-id').value;
+            const newQty = parseInt(document.getElementById('edit-stock-qty').value);
+            if (isNaN(newQty) || newQty < 0) return;
+
+            const prod = products.find(p => p.id === id);
+            if (prod) {
+                prod.stock = newQty;
+                saveProductsToStorage();
+                renderProducts();
+                closeEditStockModal();
+                showToast(currentLang === 'ar' ? 'تم تحديث كمية المخزون' : 'Stock updated');
+            }
+        }
+
+        function resetDefaultProducts() {
+            if (confirm(currentLang === 'ar' ? 'هل تريد إعادة تعيين المنتجات إلى القائمة الافتراضية؟' : 'Reset products to default?')) {
+                products = [...defaultProducts];
+                saveProductsToStorage();
+                renderProducts();
+                showToast(currentLang === 'ar' ? 'تم استعادة القائمة الافتراضية للمتجر' : 'Restored default product list');
+            }
+        }
+
+        function saveProductsToStorage() {
+            localStorage.setItem('fixfy_products', JSON.stringify(products));
+        }
+
+        // -------------------------------------------------------------
+        // Render & Filter Products Logic
+        // -------------------------------------------------------------
+        function renderProducts() {
+            const grid = document.getElementById('products-grid');
+            const noResults = document.getElementById('no-results');
+            const searchVal = document.getElementById('search-input').value.toLowerCase().trim();
+            const brandVal = document.getElementById('finder-brand').value;
+            const warrantyBanner = document.getElementById('assembled-warranty-banner');
+
+            if (currentApplianceFilter === 'أجهزة مجمعة') {
+                warrantyBanner.classList.remove('hidden');
+            } else {
+                warrantyBanner.classList.add('hidden');
+            }
+
+            const filtered = products.filter(p => {
+                let matchesAppliance = false;
+                if (currentApplianceFilter === 'recommended') {
+                    matchesAppliance = p.recommended === true || (p.reviews && p.reviews.length > 0);
+                } else {
+                    matchesAppliance = (currentApplianceFilter === 'all') || (p.appliance === currentApplianceFilter);
+                }
+
+                const matchesBrand = (brandVal === 'all') || (p.brand === brandVal);
+                const matchesSearch = p.title.toLowerCase().includes(searchVal) || 
+                                      p.brand.toLowerCase().includes(searchVal) || 
+                                      p.appliance.toLowerCase().includes(searchVal) ||
+                                      p.description.toLowerCase().includes(searchVal);
+                return matchesAppliance && matchesBrand && matchesSearch;
+            });
+
+            document.getElementById('product-count').innerText = `(${filtered.length} ${currentLang === 'ar' ? 'منتج' : 'items'})`;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                noResults.classList.remove('hidden');
+                return;
+            }
+
+            noResults.classList.add('hidden');
+            grid.innerHTML = filtered.map(p => {
+                let stockBadgeHTML = '';
+                if (p.stock === 0) {
+                    stockBadgeHTML = `<span class="bg-red-600 text-white text-[11px] font-black px-2.5 py-1 rounded-md shadow">${currentLang === 'ar' ? 'نفذت الكمية' : 'Out of Stock'}</span>`;
+                } else if (p.stock <= 3) {
+                    stockBadgeHTML = `<span class="bg-amber-500 text-black text-[11px] font-black px-2.5 py-1 rounded-md shadow animate-pulse">${currentLang === 'ar' ? 'موجود ' + p.stock + ' قطع فقط' : 'Only ' + p.stock + ' left'}</span>`;
+                } else {
+                    stockBadgeHTML = `<span class="bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-md">${currentLang === 'ar' ? 'متوفر بالمخزن' : 'In Stock'}</span>`;
+                }
+
+                const avgRating = p.reviews && p.reviews.length > 0 
+                    ? (p.reviews.reduce((acc, r) => acc + parseInt(r.rating), 0) / p.reviews.length).toFixed(1)
+                    : '5.0';
+
+                const isAssembled = p.appliance === 'أجهزة مجمعة';
+
+                return `
+                    <div class="bg-white dark:bg-darkcard rounded-2xl shadow-sm hover:shadow-xl transition duration-300 border ${isAssembled ? 'border-amber-400 dark:border-amber-600/60' : 'border-gray-200 dark:border-gray-800'} flex flex-col overflow-hidden relative group">
+                        
+                        <div class="relative bg-gray-100 dark:bg-gray-800 h-48 overflow-hidden flex items-center justify-center">
+                            <img src="${p.image}" alt="${p.title}" 
+                                 onerror="this.onerror=null; this.src='https://placehold.co/400x300/800020/ffffff?text=Fixfy+Products';" 
+                                 class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            
+                            <div class="absolute top-2 right-2 flex flex-col gap-1 items-end">
+                                ${stockBadgeHTML}
+                                ${isAssembled ? `<span class="bg-amber-500 text-black text-[10px] font-black px-2 py-0.5 rounded shadow"><i class="fa-solid fa-shield-halved ml-1"></i> ${currentLang === 'ar' ? 'ضمان 6 أشهر' : '6 M Warranty'}</span>` : ''}
+                                ${p.recommended ? `<span class="bg-amber-400 text-black text-[9px] font-black px-1.5 py-0.5 rounded shadow"><i class="fa-solid fa-star"></i> ${currentLang === 'ar' ? 'مقترح' : 'Top Pick'}</span>` : ''}
+                            </div>
+
+                            <span class="absolute bottom-2 right-2 bg-black/60 backdrop-blur-md text-white text-[10px] px-2 py-0.5 rounded">
+                                ${p.brand}
+                            </span>
+                        </div>
+
+                        <div class="p-4 flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between text-xs text-gray-500 mb-1">
+                                    <span class="font-bold text-burgundy dark:text-burgundy-light"><i class="fa-solid fa-tag ml-1"></i>${p.appliance}</span>
+                                    <button onclick="openReviewsModal('${p.id}')" class="text-amber-500 font-bold flex items-center hover:underline">
+                                        <i class="fa-solid fa-star text-xs ml-1"></i> ${avgRating} (${p.reviews ? p.reviews.length : 0})
+                                    </button>
+                                </div>
+
+                                <h3 class="font-extrabold text-sm text-gray-900 dark:text-white mb-1 line-clamp-2 leading-tight">
+                                    ${p.title}
+                                </h3>
+
+                                <p class="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 mb-3 leading-relaxed">
+                                    ${p.description}
+                                </p>
+                            </div>
+
+                            <div>
+                                <div class="flex items-baseline justify-between mb-3 border-t border-gray-100 dark:border-gray-800 pt-3">
+                                    <span class="text-xs text-gray-500">${currentLang === 'ar' ? 'السعر:' : 'Price:'}</span>
+                                    <span class="text-lg font-black text-burgundy dark:text-burgundy-light">${p.price} <span class="text-xs">${currentLang === 'ar' ? 'ج.م' : 'EGP'}</span></span>
+                                </div>
+
+                                <div class="space-y-2">
+                                    <button onclick="addToCart('${p.id}')" ${p.stock === 0 ? 'disabled' : ''} 
+                                            class="w-full ${p.stock === 0 ? 'bg-gray-300 dark:bg-gray-800 text-gray-500 cursor-not-allowed' : 'bg-burgundy hover:bg-burgundy-dark text-white shadow-md'} font-bold text-xs py-2.5 rounded-xl transition flex items-center justify-center space-x-2 space-x-reverse">
+                                        <i class="fa-solid fa-cart-plus"></i>
+                                        <span>${p.stock === 0 ? (currentLang === 'ar' ? 'غير متوفر حالياً' : 'Out of Stock') : (currentLang === 'ar' ? 'إضافة إلى السلة' : 'Add to Cart')}</span>
+                                    </button>
+
+                                    ${isDevUnlocked ? `
+                                        <div class="flex items-center justify-between gap-1 pt-2 border-t border-dashed border-amber-300 dark:border-amber-900/50">
+                                            <button onclick="openEditStockModal('${p.id}')" class="bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 text-[10px] font-bold px-2 py-1 rounded hover:bg-amber-200">
+                                                <i class="fa-solid fa-pen-to-square ml-1"></i> تعديل المخزون
+                                            </button>
+                                            <button onclick="deleteProduct('${p.id}')" class="bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 text-[10px] font-bold px-2 py-1 rounded hover:bg-red-200">
+                                                <i class="fa-solid fa-trash ml-1"></i> إزالة
+                                            </button>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filterByAppliance(type) {
+            currentApplianceFilter = type;
+            document.querySelectorAll('.app-pill').forEach(btn => {
+                if (btn.dataset.appliance === type) {
+                    btn.className = "app-pill active px-4 py-2 rounded-full font-bold whitespace-nowrap border transition text-xs bg-burgundy text-white border-burgundy";
+                } else if(btn.dataset.appliance === 'أجهزة مجمعة') {
+                    btn.className = "app-pill px-4 py-2 rounded-full font-bold whitespace-nowrap border transition text-xs bg-amber-100 text-amber-900 border-amber-400 hover:bg-amber-200 dark:bg-amber-900/40 dark:text-amber-300";
+                } else {
+                    btn.className = "app-pill px-4 py-2 rounded-full font-bold whitespace-nowrap border transition text-xs bg-white dark:bg-darkcard text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-700 hover:border-burgundy";
+                }
+            });
+            document.getElementById('finder-appliance').value = type;
+            renderProducts();
+        }
+
+        function applyFilters() {
+            const app = document.getElementById('finder-appliance').value;
+            filterByAppliance(app);
+        }
+
+        function handleSearch() {
+            renderProducts();
+        }
+
+        function syncMobileSearch(val) {
+            document.getElementById('search-input').value = val;
+            renderProducts();
+        }
+
+        function resetFilters() {
+            document.getElementById('search-input').value = '';
+            document.getElementById('search-input-mobile').value = '';
+            document.getElementById('finder-appliance').value = 'all';
+            document.getElementById('finder-brand').value = 'all';
+            filterByAppliance('all');
+        }
+
+        // -------------------------------------------------------------
+        // Shopping Cart Logic
+        // -------------------------------------------------------------
+        function addToCart(id) {
+            const prod = products.find(p => p.id === id);
+            if (!prod || prod.stock === 0) return;
+
+            const existing = cart.find(item => item.id === id);
+            if (existing) {
+                if (existing.qty < prod.stock) {
+                    existing.qty++;
+                    showToast(currentLang === 'ar' ? 'تمت زيادة الكمية بالسلة' : 'Quantity increased in cart');
+                } else {
+                    showToast(currentLang === 'ar' ? `الكمية المتوفرة حالياً بالمخزن (${prod.stock}) قطع فقط!` : `Only ${prod.stock} items available!`, 'warning');
+                    return;
+                }
+            } else {
+                cart.push({ id: prod.id, qty: 1 });
+                showToast(currentLang === 'ar' ? 'تمت الإضافة لسلة الشراء' : 'Added to cart');
+            }
+
+            saveCartToStorage();
+            updateCartUI();
+        }
+
+        function updateCartQuantity(id, delta) {
+            const item = cart.find(i => i.id === id);
+            const prod = products.find(p => p.id === id);
+            if (!item || !prod) return;
+
+            item.qty += delta;
+
+            if (item.qty > prod.stock) {
+                item.qty = prod.stock;
+                showToast(currentLang === 'ar' ? `الكمية المتاحة بالمخزن ${prod.stock} قطع فقط` : `Stock limit is ${prod.stock}`, 'warning');
+            }
+
+            if (item.qty <= 0) {
+                cart = cart.filter(i => i.id !== id);
+                showToast(currentLang === 'ar' ? 'تم حذف العنصر من السلة' : 'Item removed');
+            }
+
+            saveCartToStorage();
+            updateCartUI();
+        }
+
+        function removeFromCart(id) {
+            cart = cart.filter(i => i.id !== id);
+            saveCartToStorage();
+            updateCartUI();
+            showToast(currentLang === 'ar' ? 'تم حذف العنصر من السلة' : 'Item removed');
+        }
+
+        function updateCartUI() {
+            const badge = document.getElementById('cart-badge');
+            const cartItemsContainer = document.getElementById('cart-items');
+            const cartTotal = document.getElementById('cart-total');
+
+            const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+
+            if (totalQty > 0) {
+                badge.innerText = totalQty;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+
+            let totalPrice = 0;
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = `
+                    <div class="text-center py-12 text-gray-400">
+                        <i class="fa-solid fa-basket-shopping text-5xl mb-3 opacity-40"></i>
+                        <p class="text-xs font-bold">${currentLang === 'ar' ? 'سلة الشراء فارغة حالياً' : 'Your cart is empty'}</p>
+                    </div>
+                `;
+            } else {
+                cartItemsContainer.innerHTML = cart.map(item => {
+                    const prod = products.find(p => p.id === item.id);
+                    if (!prod) return '';
+
+                    const itemTotal = prod.price * item.qty;
+                    totalPrice += itemTotal;
+
+                    return `
+                        <div class="flex items-center justify-between bg-gray-50 dark:bg-gray-800 p-3 rounded-xl border border-gray-200 dark:border-gray-700">
+                            <img src="${prod.image}" alt="${prod.title}" class="w-12 h-12 rounded-lg object-cover">
+                            <div class="flex-1 mr-3">
+                                <h4 class="text-xs font-bold line-clamp-1 dark:text-white">${prod.title}</h4>
+                                <span class="text-[11px] text-burgundy dark:text-burgundy-light font-black">${prod.price} ${currentLang === 'ar' ? 'ج.م' : 'EGP'}</span>
+                            </div>
+                            
+                            <div class="flex items-center space-x-1 space-x-reverse bg-white dark:bg-darkcard px-2 py-1 rounded-lg border dark:border-gray-700 ml-2">
+                                <button onclick="updateCartQuantity('${item.id}', -1)" class="text-xs text-gray-500 font-bold px-1 hover:text-red-500">-</button>
+                                <span class="text-xs font-extrabold px-1 dark:text-white">${item.qty}</span>
+                                <button onclick="updateCartQuantity('${item.id}', 1)" class="text-xs text-gray-500 font-bold px-1 hover:text-emerald-500">+</button>
+                            </div>
+
+                            <button onclick="removeFromCart('${item.id}')" class="text-gray-400 hover:text-red-600 transition p-1">
+                                <i class="fa-solid fa-trash text-xs"></i>
+                            </button>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            cartTotal.innerText = `${totalPrice} ${currentLang === 'ar' ? 'ج.م' : 'EGP'}`;
+        }
+
+        function toggleCartDrawer() {
+            const drawer = document.getElementById('cart-drawer');
+            const backdrop = document.getElementById('cart-drawer-backdrop');
+            drawer.classList.toggle('-translate-x-full');
+            backdrop.classList.toggle('hidden');
+        }
+
+        function saveCartToStorage() {
+            localStorage.setItem('fixfy_cart', JSON.stringify(cart));
+        }
+
+        let pendingRedirectUrl = '';
+
+        function openCustomerDetailsModal() {
+            if (cart.length === 0) {
+                showToast(currentLang === 'ar' ? 'السلة فارغة! اضف بعض المنتجات أولاً' : 'Cart is empty!', 'warning');
+                return;
+            }
+            toggleCartDrawer();
+            document.getElementById('checkout-modal').classList.remove('hidden');
+        }
+
+        function closeCheckoutModal() {
+            document.getElementById('checkout-modal').classList.add('hidden');
+        }
+
+        function submitCustomerOrder(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('cust-name').value.trim();
+            const phone = document.getElementById('cust-phone').value.trim();
+            const gov = document.getElementById('cust-gov').value;
+            const address = document.getElementById('cust-address').value.trim();
+            const deliveryTime = document.getElementById('cust-time').value;
+
+            let msg = `*طلب جديد من متجر فكسفاي (fixify)*%0A-------------------------------%0A`;
+            msg += `👤 *بيانات العميل:*%0A`;
+            msg += `• *الاسم:* ${name}%0A`;
+            msg += `• *رقم الهاتف:* ${phone}%0A`;
+            msg += `• *المحافظة:* ${gov}%0A`;
+            msg += `• *العنوان التفصيلي:* ${address}%0A`;
+            msg += `• *الوقت المفضل للتسليم:* ${deliveryTime}%0A%0A`;
+
+            msg += `📦 *المنتجات المطلوبة:*%0A`;
+            let total = 0;
+
+            cart.forEach((item, index) => {
+                const prod = products.find(p => p.id === item.id);
+                if (prod) {
+                    const subtotal = prod.price * item.qty;
+                    total += subtotal;
+                    msg += `${index + 1}. *${prod.title}*%0A   - القسم: ${prod.appliance}%0A   - الكمية: ${item.qty}%0A   - السعر: ${subtotal} ج.م%0A`;
+                }
+            });
+
+            msg += `-------------------------------%0A💰 *الإجمالي الكلي:* ${total} ج.م%0A%0Aيرجى التأكيد وبدء تجهيز التوصيل!`;
+
+            pendingRedirectUrl = `https://wa.me/message/B7RAZYGB5ZJ6D1?text=${msg}`;
+
+            closeCheckoutModal();
+            
+            // Clear Cart after successful order
+            cart = [];
+            saveCartToStorage();
+            updateCartUI();
+
+            // Show Success Modal
+            document.getElementById('order-success-modal').classList.remove('hidden');
+        }
+
+        function closeSuccessAndRedirect() {
+            document.getElementById('order-success-modal').classList.add('hidden');
+            if (pendingRedirectUrl) {
+                window.open(pendingRedirectUrl, '_blank');
+            }
+        }
+
+        // -------------------------------------------------------------
+        // Toast Notifications
+        // -------------------------------------------------------------
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const msgEl = document.getElementById('toast-message');
+            const iconEl = document.getElementById('toast-icon');
+
+            msgEl.innerText = message;
+
+            if (type === 'warning') {
+                iconEl.className = 'fa-solid fa-circle-exclamation text-amber-400 text-base';
+            } else if (type === 'info') {
+                iconEl.className = 'fa-solid fa-circle-info text-blue-400 text-base';
+            } else {
+                iconEl.className = 'fa-solid fa-circle-check text-emerald-400 text-base';
+            }
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
